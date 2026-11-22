@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ride Oracle – Katsina</title>
+<style>
+:root{--bg:#f6f7f4;--card:#fff;--tx:#1b2a22;--mu:#5d6b63;--ac:#0f7a4d;--ac2:#e8f4ee;--rd:#d64545;--road:#c9cfc8;--map:#eef2ea;--bd:#dfe4dc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a16;--card:#1b2620;--tx:#e8efe9;--mu:#9bab a1;--mu:#9aaba0;--ac:#3ec48a;--ac2:#1f3a2e;--rd:#ff7b7b;--road:#3a4840;--map:#17211c;--bd:#2c3a32}}
+:root[data-theme="dark"]{--bg:#121a16;--card:#1b2620;--tx:#e8efe9;--mu:#9aaba0;--ac:#3ec48a;--ac2:#1f3a2e;--rd:#ff7b7b;--road:#3a4840;--map:#17211c;--bd:#2c3a32}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:520px;margin:0 auto;padding:12px}
+h1{font-size:19px;margin:4px 0 2px}.sub{color:var(--mu);font-size:12px;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-weight:600}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-top:10px}
+label{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}select,.btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px}
+.btn{background:var(--ac);color:#fff;border:0;font-weight:700;margin-top:12px}.btn.sec{background:var(--ac2);color:var(--ac)}.btn:disabled{opacity:.5}
+svg{width:100%;height:auto;background:var(--map);border-radius:12px;border:1px solid var(--bd);display:block}
+.row{display:flex;justify-content:space-between;gap:8px;padding:3px 0}.row span:first-child{color:var(--mu)}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--ac2);color:var(--ac);font-size:12px;font-weight:600}
+.hide{display:none}.pin{cursor:pointer}
+input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:16px}
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;color:var(--mu)}#splash.hide{display:none}
+.sp{width:44px;height:44px;border:4px solid var(--ac2);border-top-color:var(--ac);border-radius:50%;animation:r .9s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+@keyframes p{0%{r:6;opacity:.8}100%{r:20;opacity:0}}.pulse{animation:p 1.4s infinite;fill:var(--rd)}
+
+/* Ride Oracle responsive mobile-first interface */
+:root{
+  --bg:#f3f7f4;--card:#ffffff;--tx:#17251e;--mu:#68786e;
+  --ac:#087b4b;--ac2:#e5f4ec;--rd:#dc4545;--road:#cbd6ce;
+  --map:#edf4ef;--bd:#dce7df;--shadow:0 8px 24px rgba(17,55,35,.07);
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101914;--card:#19251e;--tx:#edf5ef;--mu:#a2b2a7;
+    --ac:#40c889;--ac2:#203b2d;--rd:#ff7777;--road:#3a4b40;
+    --map:#17231b;--bd:#2d3d32;--shadow:0 8px 24px rgba(0,0,0,.2);
+  }
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+.w{width:100%;max-width:480px;min-height:100vh;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+h1{font-size:22px;line-height:1.2;letter-spacing:-.55px;margin:5px 0 5px;font-weight:850}
+.sub{color:var(--mu);font-size:13px;margin-bottom:14px}
+#auth h1,#app h1{display:flex;align-items:center;gap:7px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0 14px}
+.tabs button{min-height:46px;border:1px solid var(--bd);background:var(--card);color:var(--mu);border-radius:13px;font:700 14px inherit;font-weight:750;box-shadow:0 2px 5px rgba(0,0,0,.02)}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 5px 14px rgba(8,123,75,.18)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-top:13px;box-shadow:var(--shadow)}
+label{display:block;font-size:12px;font-weight:700;letter-spacing:.15px;color:var(--mu);margin:13px 0 6px}
+input,select{display:block;width:100%;min-height:48px;padding:12px 13px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;font-size:16px;outline:none;transition:border-color .18s,box-shadow .18s}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 14%,transparent)}
+input::placeholder{color:var(--mu)}
+.btn{width:100%;min-height:50px;padding:13px 16px;margin-top:15px;border:0;border-radius:13px;background:var(--ac);color:#fff;font:inherit;font-weight:800;font-size:15px;letter-spacing:.1px;box-shadow:0 6px 14px rgba(8,123,75,.18);cursor:pointer;transition:transform .15s,opacity .15s}
+.btn:active{transform:scale(.985)}
+.btn.sec{background:var(--ac2);color:var(--ac);box-shadow:none}
+.btn:disabled{opacity:.48;box-shadow:none}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;font-size:13px}
+.row span:first-child{color:var(--mu)}
+.pill{display:inline-flex;align-items:center;justify-content:center;padding:5px 11px;border-radius:99px;background:var(--ac2);color:var(--ac);font-size:12px;font-weight:750;white-space:nowrap}
+#who{max-width:70%;overflow:hidden;text-overflow:ellipsis}
+#out{font:inherit;font-weight:750;background:var(--card);border:1px solid var(--bd);padding:7px 12px}
+#app>h1{margin-top:4px}
+#app>.sub{margin-bottom:12px}
+#pp label:first-child{margin-top:0}
+#map{width:100%;height:auto;aspect-ratio:400/360;display:block;margin-top:14px;background:var(--map);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--shadow);touch-action:pan-y}
+#info{font-size:13px;line-height:1.6}
+#info .row{border-bottom:1px solid var(--bd);padding:9px 0}
+#info .row:last-of-type{border-bottom:0}
+#pst{line-height:1.55}
+#splash{position:fixed;inset:0;min-height:100dvh;padding:24px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;color:var(--mu);text-align:center}
+#splash>div:first-child{font-size:27px!important;letter-spacing:-.6px}
+#splash .sp{width:46px;height:46px}
+.hide{display:none!important}
+button,select,input{touch-action:manipulation}
+@media(min-width:600px){
+  body{padding:24px 0}
+  .w{min-height:calc(100vh - 48px);border:1px solid var(--bd);border-radius:24px;background:var(--bg);box-shadow:0 15px 55px rgba(20,50,30,.08)}
+  #splash{padding:40px}
+}
+@media(max-width:360px){
+  .w{padding-left:12px;padding-right:12px}
+  h1{font-size:20px}
+  .card{padding:13px;border-radius:15px}
+  .row{gap:7px;font-size:12px}
+}
+
+/* Modern Android-style passenger and professional admin dashboards */
+.auth-tabs{grid-template-columns:repeat(3,1fr)}
+#app .app-hero{position:relative;overflow:hidden;padding:20px;border-radius:22px;background:linear-gradient(135deg,#087b4b,#075c3b);color:#fff;margin:14px 0 12px;box-shadow:0 12px 26px rgba(8,123,75,.2)}
+.app-hero:after{content:"🛺";position:absolute;right:8px;bottom:-18px;font-size:90px;opacity:.17;transform:rotate(-12deg)}
+.app-hero .eyebrow{font-size:10px;letter-spacing:1.3px;font-weight:800;opacity:.78}.app-hero h2{font-size:23px;line-height:1.2;margin:8px 0 5px;max-width:260px}.app-hero p{font-size:12px;margin:0;opacity:.85;max-width:240px}
+.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.quick-stat{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:13px;box-shadow:var(--shadow)}.quick-stat span{display:block;color:var(--mu);font-size:11px;font-weight:700}.quick-stat b{display:block;font-size:20px;margin-top:3px}.quick-stat small{font-size:10px;color:var(--mu)}
+#pp.card,#dp.card{border-radius:20px}.section-caption{font-size:14px;font-weight:850;margin:2px 0 10px}
+</style></head><body><div id="splash"><div style="font-size:24px;font-weight:800;color:var(--ac);text-align:center">Welcome to Ride Oracle</div><div style="max-width:280px;text-align:center;font-size:14px;margin-bottom:6px">A platform that connects passengers with the right ride</div><div style="position:relative;width:150px;height:150px"><svg viewBox="0 0 120 120" style="background:none;border:0;border-radius:0;width:100%;height:auto"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--ac2)" stroke-width="8"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--ac)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/></svg><div id="pct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--tx)">1%</div></div><div>Loading…</div></div>
+<div id="auth" class="w hide"><h1>🚕 Ride Oracle · Katsina</h1><div class="sub">Sign in to continue</div>
+<div class="tabs auth-tabs"><button id="aP" class="on">Passenger</button><button id="aD">Driver</button></div>
+<div class="card"><div id="nmw" class="hide"><label>Full name</label><input id="nm" autocomplete="name"></div>
+<div id="drw" class="hide"><label>Vehicle type</label><select id="vt"><option>Napep</option><option>Okada</option></select>
+<label>Vehicle number</label><input id="vn">
+<label>Vehicle LGA number</label><input id="vl">
+<label>NIN (11 digits)</label><input id="nin" inputmode="numeric" maxlength="11">
+<label>State</label><input id="stt" value="Katsina">
+<label>LGA</label><input id="lga" value="Katsina">
+<label>Residential address</label><input id="adr" autocomplete="street-address"></div>
+<label id="phLabel">Phone number</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel" placeholder="Enter phone number">
+<label>Password</label><input id="pw" type="password" autocomplete="current-password">
+<button class="btn" id="subm">Log in</button><div id="err" class="sub" style="color:var(--rd);margin:8px 0 0"></div>
+<div id="sw" class="sub" style="text-align:center;color:var(--ac);margin:10px 0 0"></div></div></div>
+<div class="w hide" id="app">
+<h1>🚕 Ride Oracle · Katsina</h1>
+<div class="sub">Your everyday ride, made easier</div>
+<div class="app-hero"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Where would you like to go?</h2><p>Find a nearby Napep or Okada and get moving.</p></div>
+<div class="quick-stats"><div class="quick-stat"><span>YOUR ROLE</span><b id="roleLabel">Passenger</b><small>Ride Oracle account</small></div><div class="quick-stat"><span>DRIVER STATUS</span><b id="quickStatus">Ready</b><small id="quickHint">Start by choosing a location</small></div></div>
+<div class="row" style="align-items:center"><span id="who" class="pill"></span><button id="out" class="pill" style="border:0;cursor:pointer">Log out</button></div>
+
+<div id="pp" class="card">
+ <label>Pickup area</label><select id="from"></select>
+ <label>Destination</label><select id="to"></select>
+ <button class="btn" id="search">🔍 Search for a ride</button>
+ <div id="pst" class="sub" style="margin:10px 0 0;font-size:14px"></div>
+</div>
+
+<div id="dp" class="card hide">
+ <div class="row"><span>Status</span><span id="dst" class="pill">Offline</span></div>
+ <button class="btn" id="online">Go online</button>
+</div>
+
+<svg id="map" viewBox="0 0 400 360" role="img" aria-label="Map of Katsina areas"></svg>
+<div id="info" class="card hide"></div>
+
+
+</div>
+<script>
+const N={mk:['Central Market',200,200],pl:['Gobarau / Emir’s Palace',235,165],km:['Kofar Marusa',150,140],kk:['Kofar Kaura',265,105],kd:['Kofar Durbi',315,200],kg:['Kofar Guga',115,235],um:['UMYU Campus',80,315],st:['Katsina Stadium',290,295],lc:['Low-Cost Layout',200,300],fs:['Filin Samji',345,135],rf:['Rafindadi',50,185],su:['Sabuwar Unguwa',180,60],dg:['Dandagoro',365,245],ks:['Kofar Sauri',250,245],gr:['GRA Katsina',150,335]};
+const E=[['mk','pl'],['mk','km'],['pl','kk'],['pl','kd'],['mk','kg'],['mk','lc'],['lc','um'],['lc','st'],['kd','st'],['kd','fs'],['kk','fs'],['kg','um'],['km','kk'],['rf','kg'],['rf','km'],['su','km'],['su','kk'],['dg','kd'],['dg','st'],['ks','mk'],['ks','st'],['gr','lc'],['gr','um']];
+const adj={};Object.keys(N).forEach(k=>adj[k]=[]);E.forEach(([a,b])=>{adj[a].push(b);adj[b].push(a)});
+const $=i=>document.getElementById(i),KM=0.0125;
+let role='p',online=false,sel=null,busy=false,reqs=[],drv={x:200,y:200,node:'mk'},route=null,seq=0;
+function pt(id){const n=N[id],nb=adj[id][Math.floor(Math.random()*adj[id].length)],m=N[nb],k=.15+Math.random()*.5;return{x:n[1]+(m[1]-n[1])*k,y:n[2]+(m[2]-n[2])*k,road:n[0]+' – '+m[0]+' road'}}
+function gps(x,y){return(12.9908+(200-y)*0.00012).toFixed(5)+'° N, '+(7.6018+(x-200)*0.00012).toFixed(5)+'° E'}
+function bfs(a,b){const q=[[a]],s=new Set([a]);while(q.length){const p=q.shift(),l=p[p.length-1];if(l==b)return p;adj[l].forEach(n=>{if(!s.has(n)){s.add(n);q.push([...p,n])}})}return[a]}
+function len(ps){let d=0;for(let i=1;i<ps.length;i++)d+=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);return d*KM}
+function pathTo(from,to,start,end){const ns=bfs(from,to).map(k=>({x:N[k][1],y:N[k][2]}));return[start,...ns,...(end?[end]:[])]}
+const opts=Object.keys(N).map(k=>`<option value="${k}">${N[k][0]}</option>`).join('');
+$('from').innerHTML=opts;$('to').innerHTML=opts;$('to').value='um';
+function arrivalMinutes(km){
+ // Show varied estimated arrival times in 5-minute steps.
+ // Never display an arrival estimate below 15 minutes.
+ const trafficDelay=Math.floor(Math.random()*16); // 0–15 minutes
+ const estimate=km/20*60+trafficDelay;
+ return Math.max(15,Math.ceil(estimate/5)*5);
+}
+function nearVeh(r){const d=k=>Math.hypot(N[k][1]-r.x,N[k][2]-r.y),ks=Object.keys(N).sort((a,b)=>d(a)-d(b)).slice(0,6),out=[];
+ for(let i=0;i<4;i++){const a=ks[Math.floor(Math.random()*ks.length)],nb=adj[a][Math.floor(Math.random()*adj[a].length)],k=.2+Math.random()*.6,x=N[a][1]+(N[nb][1]-N[a][1])*k,y=N[a][2]+(N[nb][2]-N[a][2])*k,km=Math.hypot(x-r.x,y-r.y)*KM*1.3;
+  out.push({x,y,type:Math.random()<.5?'Napep':'Okada',km,eta:arrivalMinutes(km)})}
+ return out.sort((p,q)=>p.km-q.km)}
+function seed(){reqs=[].map(([n,f,t])=>({id:++seq,name:n,from:f,to:t,...pt(f),status:'open',mine:false}))}
+seed();
+function render(){
+ $('map').classList.toggle('hide',role=='p'&&!reqs.some(r=>r.mine&&r.status!='done'));
+ let h='';E.forEach(([a,b])=>h+=`<line x1="${N[a][1]}" y1="${N[a][2]}" x2="${N[b][1]}" y2="${N[b][2]}" stroke="var(--road)" stroke-width="7" stroke-linecap="round"/>`);
+ Object.keys(N).forEach(k=>h+=`<circle cx="${N[k][1]}" cy="${N[k][2]}" r="4" fill="var(--mu)"/><text x="${N[k][1]}" y="${N[k][2]+16}" font-size="9" text-anchor="middle" fill="var(--mu)">${N[k][0]}</text>`);
+ if(route)h+=`<polyline points="${route.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="var(--ac)" stroke-width="3" stroke-dasharray="6 5"/>`;
+ reqs.filter(r=>r.status!='done'&&(role=='d'?(online&&(r.status=='open'||r.driving)):r.mine)).forEach(r=>{
+  const s=sel==r.id;h+=`<g class="pin" data-id="${r.id}">${s?`<circle class="pulse" cx="${r.x}" cy="${r.y}" r="6"/>`:''}<circle cx="${r.x}" cy="${r.y}" r="${s?9:7}" fill="var(--rd)" stroke="#fff" stroke-width="2"/><text x="${r.x}" y="${r.y-12}" font-size="10" font-weight="700" text-anchor="middle" fill="var(--tx)">${r.name}</text></g>`});
+ const mo=role=='p'&&reqs.find(r=>r.mine&&r.status=='open');
+ if(mo&&mo.near)mo.near.forEach((v,j)=>{if(!j)h+=`<line x1="${v.x}" y1="${v.y}" x2="${mo.x}" y2="${mo.y}" stroke="var(--ac)" stroke-width="3" stroke-dasharray="6 5"/><circle cx="${v.x}" cy="${v.y}" r="14" fill="none" stroke="var(--ac)" stroke-width="2"/>`;h+=`<text x="${v.x}" y="${v.y+6}" font-size="18" text-anchor="middle">${v.type=='Napep'?'🛺':'🛵'}</text>`});
+ if(online||busy||role=='p'&&reqs.some(r=>r.mine&&r.driving))h+=`<text x="${drv.x}" y="${drv.y+6}" font-size="20" text-anchor="middle">🚕</text>`;
+ $('map').innerHTML=h;
+ $('map').querySelectorAll('.pin').forEach(g=>g.onclick=()=>{if(role=='d'&&!busy){sel=+g.dataset.id;const r=reqs.find(x=>x.id==sel);route=pathTo(drv.node,r.from,{x:drv.x,y:drv.y},r);ui();render()}})}
+function ui(){
+ $('dst').textContent=busy?'On a trip':online?'Online':'Offline';$('online').textContent=online?'Go offline':'Go online';$('online').disabled=busy;
+ const r=reqs.find(x=>x.id==sel),mine=reqs.find(x=>x.mine&&x.status!='done'),i=$('info');
+ if(role=='d'&&r&&r.status=='open'){const km=len(route),road=r.road;
+  i.className='card';i.innerHTML=`<b>${r.name}</b> <span class="pill">Live location</span>
+  <div class="row"><span>On road</span><span>${road}</span></div><div class="row"><span>GPS</span><span>${gps(r.x,r.y)}</span></div>
+  <div class="row"><span>Pickup</span><span>${N[r.from][0]}</span></div><div class="row"><span>Going to</span><span>${N[r.to][0]}</span></div>
+  <div class="row"><span>Distance to you</span><span>${km.toFixed(1)} km · ~${arrivalMinutes(km)} min to reach them</span></div>
+  <button class="btn" id="acc">Accept ride</button>`;$('acc').onclick=()=>accept(r)}
+ else if(role=='d'&&!busy){i.className=online?'card':'card hide';i.innerHTML=online?'Tap a red passenger pin on the map to see their live location.':''}
+ else if(role!='d'){const m=mine&&mine.status=='open'&&mine.near;if(m){i.className='card';i.innerHTML='<b>Nearest vehicles</b>'+mine.near.map((v,j)=>`<div class="row"><span>${v.type=='Napep'?'🛺':'🛵'} ${v.type}${j?'':' (nearest)'}</span><span>${v.km.toFixed(1)} km · ~${v.eta} min</span></div>`).join('')}else i.className='card hide'}
+ $('pst').textContent=!mine?'':mine.status=='open'?'Request sent. Waiting for a driver to accept…':mine.status=='pickup'?'🚕 Driver accepted · '+fmt(mine.left)+' remaining for your ride':'🚕 Trip in progress · '+fmt(mine.left)+' to '+N[mine.to][0];
+ $('search').disabled=!!mine}
+function fmt(s){s=Math.max(0,Math.round(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+let SPD=70,TOT=1,LEG=15;
+function remain(ps,i){let rem=Math.hypot(ps[i].x-drv.x,ps[i].y-drv.y);for(let j=i+1;j<ps.length;j++)rem+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);const r=reqs.find(x=>x.driving&&x.status!='done');if(!r)return;r.left=Math.max(0,Math.ceil(LEG*60*rem/TOT));ui();if(user&&user.role=='d'){$('info').className='card';$('info').innerHTML=(r.status=='pickup'?'Heading to '+r.name+' · ':'Trip to '+N[r.to][0]+' · ')+'<b>'+fmt(r.left)+' remaining</b>'}}
+function leg(ps,r,done){TOT=1;let d=0;for(let j=1;j<ps.length;j++)d+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);TOT=Math.max(d,1);LEG=Math.max(15,Math.round(TOT*KM/20*60));r.left=LEG*60;SPD=TOT/(LEG*60);ui();go(ps,done)}
+function go(ps,done){let i=1,t=0,last=null;route=ps;function f(ts){if(last===null)last=ts;t+=(ts-last)/1000*SPD;last=ts;
+  while(i<ps.length){const d=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);if(t<d){const k=t/d;drv.x=ps[i-1].x+(ps[i].x-ps[i-1].x)*k;drv.y=ps[i-1].y+(ps[i].y-ps[i-1].y)*k;break}t-=d;i++}
+  if(i>=ps.length){drv.x=ps[ps.length-1].x;drv.y=ps[ps.length-1].y;done();return}remain(ps,i);render();requestAnimationFrame(f)}requestAnimationFrame(f)}
+function accept(r){busy=true;r.status='pickup';r.driving=true;sel=null;$('info').className='card';$('info').innerHTML='Heading to '+r.name+'…';ui();
+ leg(pathTo(drv.node,r.from,{x:drv.x,y:drv.y},r),r,()=>{r.status='trip';drv.node=r.from;ui();$('info').innerHTML='Picked up '+r.name+'. Driving to '+N[r.to][0]+'…';
+  leg(pathTo(r.from,r.to,{x:r.x,y:r.y},null),r,()=>{r.status='done';busy=false;drv.node=r.to;drv.x=N[r.to][1];drv.y=N[r.to][2];route=null;sel=null;ui();$('info').innerHTML='✅ Trip completed. Tap another passenger pin.';render()})});}
+$('search').onclick=()=>{const f=$('from').value,t=$('to').value;if(f==t){$('pst').textContent='Choose different pickup and destination.';return}
+ $('pst').textContent='Searching for nearby drivers…';setTimeout(()=>{const q={id:++seq,name:user.name.split(' ')[0],owner:user.phone,from:f,to:t,...pt(f),status:'open',mine:true};q.near=nearVeh(q);reqs.push(q);ui();render()},900)};
+$('online').onclick=()=>{online=!online;if(!online){sel=null;route=null}ui();render()};
+function tab(r){role=r;$('pp').className='card'+(r=='p'?'':' hide');$('dp').className='card'+(r=='d'?'':' hide');$('roleLabel').textContent=r=='d'?'Driver':'Passenger';$('quickStatus').textContent=r=='d'?(online?'Online':'Offline'):'Ready';$('quickHint').textContent=r=='d'?'Manage your availability':'Choose pickup and destination';sel=null;if(!busy)route=null;ui();render()}
+
+
+const mem={};const LS={get(k){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v)}catch(e){}return mem[k]||null},set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(s)}}
+let user=null,mode='login',ar='p';
+function setAuth(){$('aP').className=ar=='p'?'on':'';$('aD').className=ar=='d'?'on':'';const reg=mode=='reg';$('nmw').className=reg?'':'hide';$('drw').className=reg&&ar=='d'?'':'hide';$('phLabel').textContent='Phone number';$('ph').placeholder='Enter phone number';$('ph').type='tel';$('sw').className='sub';$('subm').textContent=reg?'Create account':'Log in';$('sw').textContent=reg?'Have an account? Log in':ar=='d'?'New driver? Register':'New passenger? Register';$('sw').style.cursor='pointer';$('err').textContent=''}
+$('aP').onclick=()=>{ar='p';mode='login';setAuth()};$('aD').onclick=()=>{ar='d';mode='login';setAuth()};
+$('sw').onclick=()=>{mode=mode=='reg'?'login':'reg';setAuth()};
+function enter(u){user=u;reqs.forEach(r=>r.mine=r.owner==u.phone);online=false;$('auth').className='w hide';$('pw').value='';$('who').textContent=(u.role=='d'?'🚕 Driver · ':'👤 ')+u.name;$('app').className='w';tab(u.role)}
+function logout(){user=null;online=false;sel=null;route=null;$('app').className='w hide';$('auth').className='w';ar='p';mode='login';setAuth()}$('out').onclick=logout;
+function renderAdmin(){const a=LS.get('ro_accts')||[],ps=a.filter(x=>x.role=='p'),ds=a.filter(x=>x.role=='d'),open=reqs.filter(x=>x.status=='open'),done=reqs.filter(x=>x.status=='done');$('statUsers').textContent=a.length;$('statPassengers').textContent=ps.length;$('statDrivers').textContent=ds.length;$('statRides').textContent=reqs.length;$('activeDrivers').textContent=online&&user&&user.role=='d'?1:0;$('pendingRides').textContent=open.length;$('completedRides').textContent=done.length;const rows=a.slice(-8).reverse();$('accountRows').innerHTML=rows.length?rows.map(x=>`<tr><td><div class="user-cell"><span class="user-initial">${(x.name||'U').charAt(0).toUpperCase()}</span>${x.name||'User'}</div></td><td><span class="role-tag">${x.role=='d'?'Driver':'Passenger'}</span></td><td>${x.phone}</td></tr>`).join(''):'<tr><td colspan="3">No registered accounts yet</td></tr>';$('rideRows').innerHTML=reqs.length?reqs.slice(-6).reverse().map(r=>`<div class="ride-row"><div><b>${r.name||'Passenger'}</b><small>${N[r.from]?.[0]||'Pickup'} → ${N[r.to]?.[0]||'Destination'}</small></div><span class="ride-status">${r.status=='done'?'Completed':r.status=='trip'?'In progress':r.status=='pickup'?'Driver assigned':'Pending'}</span></div>`).join(''):'<p class="empty-state">No ride requests yet.</p>'}
+$('refreshAdmin').onclick=renderAdmin;
+$('subm').onclick=async()=>{const raw=$('ph').value.trim(),ph=raw.replace(/\D/g,''),pw=$('pw').value,nm=$('nm').value.trim(),e=$('err'),reg=mode=='reg';
+ if(ph.length<10){e.textContent='Enter a valid phone number.';return}
+ if(pw.length<6){e.textContent='Password must be at least 6 characters.';return}
+ const a=LS.get('ro_accts')||[],h=await hash(pw);
+ if(reg){if(!nm){e.textContent='Enter your full name.';return}
+ let x={};if(ar=='d'){x={vt:$('vt').value,vn:$('vn').value.trim(),vl:$('vl').value.trim(),nin:$('nin').value.replace(/\D/g,''),state:$('stt').value.trim(),lga:$('lga').value.trim(),addr:$('adr').value.trim()};
+  if(!x.vn||!x.vl||!x.state||!x.lga||!x.addr){e.textContent='Please fill in all driver details.';return}
+  if(x.nin.length!=11){e.textContent='NIN must be 11 digits.';return}}
+ if(a.some(y=>y.phone==ph&&y.role==ar)){e.textContent='Phone already registered. Please log in.';return}
+ const u={role:ar,name:nm,phone:ph,h,...x};a.push(u);LS.set('ro_accts',a);enter(u)}
+ else{const u=a.find(x=>x.phone==ph&&x.role==ar&&x.h==h);if(!u){e.textContent='Wrong phone number or password.';return}enter(u)}};
+(async()=>{
+ setAuth();const t0=performance.now();(function f(t){const p=Math.min(100,Math.max(1,Math.round((t-t0)/20)));$('pct').textContent=p+'%';$('ring').style.strokeDashoffset=326.7*(1-p/100);if(p<100)requestAnimationFrame(f);else setTimeout(()=>{$('splash').className='hide';$('auth').className='w'},150)})(t0)})();
+</script></body></html>
