@@ -85,16 +85,15 @@ button,select,input{touch-action:manipulation}
   .row{gap:7px;font-size:12px}
 }
 
-/* Modern Android-style passenger and professional admin dashboards */
-.auth-tabs{grid-template-columns:repeat(3,1fr)}
+/* Passenger home */
 #app .app-hero{position:relative;overflow:hidden;padding:20px;border-radius:22px;background:linear-gradient(135deg,#087b4b,#075c3b);color:#fff;margin:14px 0 12px;box-shadow:0 12px 26px rgba(8,123,75,.2)}
 .app-hero:after{content:"🛺";position:absolute;right:8px;bottom:-18px;font-size:90px;opacity:.17;transform:rotate(-12deg)}
 .app-hero .eyebrow{font-size:10px;letter-spacing:1.3px;font-weight:800;opacity:.78}.app-hero h2{font-size:23px;line-height:1.2;margin:8px 0 5px;max-width:260px}.app-hero p{font-size:12px;margin:0;opacity:.85;max-width:240px}
 .quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.quick-stat{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:13px;box-shadow:var(--shadow)}.quick-stat span{display:block;color:var(--mu);font-size:11px;font-weight:700}.quick-stat b{display:block;font-size:20px;margin-top:3px}.quick-stat small{font-size:10px;color:var(--mu)}
-#pp.card,#dp.card{border-radius:20px}.section-caption{font-size:14px;font-weight:850;margin:2px 0 10px}
+#pp.card,#dp.card{border-radius:20px}
 </style></head><body><div id="splash"><div style="font-size:24px;font-weight:800;color:var(--ac);text-align:center">Welcome to Ride Oracle</div><div style="max-width:280px;text-align:center;font-size:14px;margin-bottom:6px">A platform that connects passengers with the right ride</div><div style="position:relative;width:150px;height:150px"><svg viewBox="0 0 120 120" style="background:none;border:0;border-radius:0;width:100%;height:auto"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--ac2)" stroke-width="8"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--ac)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/></svg><div id="pct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--tx)">1%</div></div><div>Loading…</div></div>
 <div id="auth" class="w hide"><h1>🚕 Ride Oracle · Katsina</h1><div class="sub">Sign in to continue</div>
-<div class="tabs auth-tabs"><button id="aP" class="on">Passenger</button><button id="aD">Driver</button></div>
+<div class="tabs"><button id="aP" class="on">Passenger</button><button id="aD">Driver</button></div>
 <div class="card"><div id="nmw" class="hide"><label>Full name</label><input id="nm" autocomplete="name"></div>
 <div id="drw" class="hide"><label>Vehicle type</label><select id="vt"><option>Napep</option><option>Okada</option></select>
 <label>Vehicle number</label><input id="vn">
@@ -103,15 +102,15 @@ button,select,input{touch-action:manipulation}
 <label>State</label><input id="stt" value="Katsina">
 <label>LGA</label><input id="lga" value="Katsina">
 <label>Residential address</label><input id="adr" autocomplete="street-address"></div>
-<label id="phLabel">Phone number</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel" placeholder="Enter phone number">
+<label>Phone number</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel">
 <label>Password</label><input id="pw" type="password" autocomplete="current-password">
 <button class="btn" id="subm">Log in</button><div id="err" class="sub" style="color:var(--rd);margin:8px 0 0"></div>
 <div id="sw" class="sub" style="text-align:center;color:var(--ac);margin:10px 0 0"></div></div></div>
 <div class="w hide" id="app">
 <h1>🚕 Ride Oracle · Katsina</h1>
 <div class="sub">Your everyday ride, made easier</div>
-<div class="app-hero"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Where would you like to go?</h2><p>Find a nearby Napep or Okada and get moving.</p></div>
-<div class="quick-stats"><div class="quick-stat"><span>YOUR ROLE</span><b id="roleLabel">Passenger</b><small>Ride Oracle account</small></div><div class="quick-stat"><span>DRIVER STATUS</span><b id="quickStatus">Ready</b><small id="quickHint">Start by choosing a location</small></div></div>
+<div id="hero" class="app-hero"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Where would you like to go?</h2><p>Find a nearby Napep or Okada and get moving.</p></div>
+<div class="quick-stats"><div class="quick-stat"><span>YOUR ROLE</span><b id="roleLabel">Passenger</b><small>Ride Oracle account</small></div><div class="quick-stat"><span>RIDE STATUS</span><b id="quickStatus">Ready</b><small id="quickHint">Start by choosing a location</small></div></div>
 <div class="row" style="align-items:center"><span id="who" class="pill"></span><button id="out" class="pill" style="border:0;cursor:pointer">Log out</button></div>
 
 <div id="pp" class="card">
@@ -144,16 +143,9 @@ function len(ps){let d=0;for(let i=1;i<ps.length;i++)d+=Math.hypot(ps[i].x-ps[i-
 function pathTo(from,to,start,end){const ns=bfs(from,to).map(k=>({x:N[k][1],y:N[k][2]}));return[start,...ns,...(end?[end]:[])]}
 const opts=Object.keys(N).map(k=>`<option value="${k}">${N[k][0]}</option>`).join('');
 $('from').innerHTML=opts;$('to').innerHTML=opts;$('to').value='um';
-function arrivalMinutes(km){
- // Show varied estimated arrival times in 5-minute steps.
- // Never display an arrival estimate below 15 minutes.
- const trafficDelay=Math.floor(Math.random()*16); // 0–15 minutes
- const estimate=km/20*60+trafficDelay;
- return Math.max(15,Math.ceil(estimate/5)*5);
-}
 function nearVeh(r){const d=k=>Math.hypot(N[k][1]-r.x,N[k][2]-r.y),ks=Object.keys(N).sort((a,b)=>d(a)-d(b)).slice(0,6),out=[];
  for(let i=0;i<4;i++){const a=ks[Math.floor(Math.random()*ks.length)],nb=adj[a][Math.floor(Math.random()*adj[a].length)],k=.2+Math.random()*.6,x=N[a][1]+(N[nb][1]-N[a][1])*k,y=N[a][2]+(N[nb][2]-N[a][2])*k,km=Math.hypot(x-r.x,y-r.y)*KM*1.3;
-  out.push({x,y,type:Math.random()<.5?'Napep':'Okada',km,eta:arrivalMinutes(km)})}
+  out.push({x,y,type:Math.random()<.5?'Napep':'Okada',km,eta:Math.max(15,Math.round(km/20*60))})}
  return out.sort((p,q)=>p.km-q.km)}
 function seed(){reqs=[].map(([n,f,t])=>({id:++seq,name:n,from:f,to:t,...pt(f),status:'open',mine:false}))}
 seed();
@@ -176,11 +168,14 @@ function ui(){
   i.className='card';i.innerHTML=`<b>${r.name}</b> <span class="pill">Live location</span>
   <div class="row"><span>On road</span><span>${road}</span></div><div class="row"><span>GPS</span><span>${gps(r.x,r.y)}</span></div>
   <div class="row"><span>Pickup</span><span>${N[r.from][0]}</span></div><div class="row"><span>Going to</span><span>${N[r.to][0]}</span></div>
-  <div class="row"><span>Distance to you</span><span>${km.toFixed(1)} km · ~${arrivalMinutes(km)} min to reach them</span></div>
+  <div class="row"><span>Distance to you</span><span>${km.toFixed(1)} km · ~${Math.max(15,Math.round(km/20*60))} min to reach them</span></div>
   <button class="btn" id="acc">Accept ride</button>`;$('acc').onclick=()=>accept(r)}
  else if(role=='d'&&!busy){i.className=online?'card':'card hide';i.innerHTML=online?'Tap a red passenger pin on the map to see their live location.':''}
  else if(role!='d'){const m=mine&&mine.status=='open'&&mine.near;if(m){i.className='card';i.innerHTML='<b>Nearest vehicles</b>'+mine.near.map((v,j)=>`<div class="row"><span>${v.type=='Napep'?'🛺':'🛵'} ${v.type}${j?'':' (nearest)'}</span><span>${v.km.toFixed(1)} km · ~${v.eta} min</span></div>`).join('')}else i.className='card hide'}
  $('pst').textContent=!mine?'':mine.status=='open'?'Request sent. Waiting for a driver to accept…':mine.status=='pickup'?'🚕 Driver accepted · '+fmt(mine.left)+' remaining for your ride':'🚕 Trip in progress · '+fmt(mine.left)+' to '+N[mine.to][0];
+ $('hero').classList.toggle('hide',role=='d');$('roleLabel').textContent=role=='d'?'Driver':'Passenger';
+ $('quickStatus').textContent=role=='d'?(busy?'On a trip':online?'Online':'Offline'):!mine?'Ready':mine.status=='open'?'Searching':mine.status=='pickup'?'On the way':'In trip';
+ $('quickHint').textContent=role=='d'?(online?'Tap a passenger pin':'Go online to get requests'):mine?'Live ride update':'Start by choosing a location';
  $('search').disabled=!!mine}
 function fmt(s){s=Math.max(0,Math.round(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 let SPD=70,TOT=1,LEG=15;
@@ -192,33 +187,4 @@ function go(ps,done){let i=1,t=0,last=null;route=ps;function f(ts){if(last===nul
 function accept(r){busy=true;r.status='pickup';r.driving=true;sel=null;$('info').className='card';$('info').innerHTML='Heading to '+r.name+'…';ui();
  leg(pathTo(drv.node,r.from,{x:drv.x,y:drv.y},r),r,()=>{r.status='trip';drv.node=r.from;ui();$('info').innerHTML='Picked up '+r.name+'. Driving to '+N[r.to][0]+'…';
   leg(pathTo(r.from,r.to,{x:r.x,y:r.y},null),r,()=>{r.status='done';busy=false;drv.node=r.to;drv.x=N[r.to][1];drv.y=N[r.to][2];route=null;sel=null;ui();$('info').innerHTML='✅ Trip completed. Tap another passenger pin.';render()})});}
-$('search').onclick=()=>{const f=$('from').value,t=$('to').value;if(f==t){$('pst').textContent='Choose different pickup and destination.';return}
- $('pst').textContent='Searching for nearby drivers…';setTimeout(()=>{const q={id:++seq,name:user.name.split(' ')[0],owner:user.phone,from:f,to:t,...pt(f),status:'open',mine:true};q.near=nearVeh(q);reqs.push(q);ui();render()},900)};
-$('online').onclick=()=>{online=!online;if(!online){sel=null;route=null}ui();render()};
-function tab(r){role=r;$('pp').className='card'+(r=='p'?'':' hide');$('dp').className='card'+(r=='d'?'':' hide');$('roleLabel').textContent=r=='d'?'Driver':'Passenger';$('quickStatus').textContent=r=='d'?(online?'Online':'Offline'):'Ready';$('quickHint').textContent=r=='d'?'Manage your availability':'Choose pickup and destination';sel=null;if(!busy)route=null;ui();render()}
-
-
-const mem={};const LS={get(k){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v)}catch(e){}return mem[k]||null},set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(s)}}
-let user=null,mode='login',ar='p';
-function setAuth(){$('aP').className=ar=='p'?'on':'';$('aD').className=ar=='d'?'on':'';const reg=mode=='reg';$('nmw').className=reg?'':'hide';$('drw').className=reg&&ar=='d'?'':'hide';$('phLabel').textContent='Phone number';$('ph').placeholder='Enter phone number';$('ph').type='tel';$('sw').className='sub';$('subm').textContent=reg?'Create account':'Log in';$('sw').textContent=reg?'Have an account? Log in':ar=='d'?'New driver? Register':'New passenger? Register';$('sw').style.cursor='pointer';$('err').textContent=''}
-$('aP').onclick=()=>{ar='p';mode='login';setAuth()};$('aD').onclick=()=>{ar='d';mode='login';setAuth()};
-$('sw').onclick=()=>{mode=mode=='reg'?'login':'reg';setAuth()};
-function enter(u){user=u;reqs.forEach(r=>r.mine=r.owner==u.phone);online=false;$('auth').className='w hide';$('pw').value='';$('who').textContent=(u.role=='d'?'🚕 Driver · ':'👤 ')+u.name;$('app').className='w';tab(u.role)}
-function logout(){user=null;online=false;sel=null;route=null;$('app').className='w hide';$('auth').className='w';ar='p';mode='login';setAuth()}$('out').onclick=logout;
-function renderAdmin(){const a=LS.get('ro_accts')||[],ps=a.filter(x=>x.role=='p'),ds=a.filter(x=>x.role=='d'),open=reqs.filter(x=>x.status=='open'),done=reqs.filter(x=>x.status=='done');$('statUsers').textContent=a.length;$('statPassengers').textContent=ps.length;$('statDrivers').textContent=ds.length;$('statRides').textContent=reqs.length;$('activeDrivers').textContent=online&&user&&user.role=='d'?1:0;$('pendingRides').textContent=open.length;$('completedRides').textContent=done.length;const rows=a.slice(-8).reverse();$('accountRows').innerHTML=rows.length?rows.map(x=>`<tr><td><div class="user-cell"><span class="user-initial">${(x.name||'U').charAt(0).toUpperCase()}</span>${x.name||'User'}</div></td><td><span class="role-tag">${x.role=='d'?'Driver':'Passenger'}</span></td><td>${x.phone}</td></tr>`).join(''):'<tr><td colspan="3">No registered accounts yet</td></tr>';$('rideRows').innerHTML=reqs.length?reqs.slice(-6).reverse().map(r=>`<div class="ride-row"><div><b>${r.name||'Passenger'}</b><small>${N[r.from]?.[0]||'Pickup'} → ${N[r.to]?.[0]||'Destination'}</small></div><span class="ride-status">${r.status=='done'?'Completed':r.status=='trip'?'In progress':r.status=='pickup'?'Driver assigned':'Pending'}</span></div>`).join(''):'<p class="empty-state">No ride requests yet.</p>'}
-$('refreshAdmin').onclick=renderAdmin;
-$('subm').onclick=async()=>{const raw=$('ph').value.trim(),ph=raw.replace(/\D/g,''),pw=$('pw').value,nm=$('nm').value.trim(),e=$('err'),reg=mode=='reg';
- if(ph.length<10){e.textContent='Enter a valid phone number.';return}
- if(pw.length<6){e.textContent='Password must be at least 6 characters.';return}
- const a=LS.get('ro_accts')||[],h=await hash(pw);
- if(reg){if(!nm){e.textContent='Enter your full name.';return}
- let x={};if(ar=='d'){x={vt:$('vt').value,vn:$('vn').value.trim(),vl:$('vl').value.trim(),nin:$('nin').value.replace(/\D/g,''),state:$('stt').value.trim(),lga:$('lga').value.trim(),addr:$('adr').value.trim()};
-  if(!x.vn||!x.vl||!x.state||!x.lga||!x.addr){e.textContent='Please fill in all driver details.';return}
-  if(x.nin.length!=11){e.textContent='NIN must be 11 digits.';return}}
- if(a.some(y=>y.phone==ph&&y.role==ar)){e.textContent='Phone already registered. Please log in.';return}
- const u={role:ar,name:nm,phone:ph,h,...x};a.push(u);LS.set('ro_accts',a);enter(u)}
- else{const u=a.find(x=>x.phone==ph&&x.role==ar&&x.h==h);if(!u){e.textContent='Wrong phone number or password.';return}enter(u)}};
-(async()=>{
- setAuth();const t0=performance.now();(function f(t){const p=Math.min(100,Math.max(1,Math.round((t-t0)/20)));$('pct').textContent=p+'%';$('ring').style.strokeDashoffset=326.7*(1-p/100);if(p<100)requestAnimationFrame(f);else setTimeout(()=>{$('splash').className='hide';$('auth').className='w'},150)})(t0)})();
-</script></body></html>
+$('search').onclick=()=>{const f=$('from').value,t=$('t
