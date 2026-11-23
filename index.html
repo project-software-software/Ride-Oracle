@@ -92,8 +92,7 @@ button,select,input{touch-action:manipulation}
 .quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.quick-stat{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:13px;box-shadow:var(--shadow)}.quick-stat span{display:block;color:var(--mu);font-size:11px;font-weight:700}.quick-stat b{display:block;font-size:20px;margin-top:3px}.quick-stat small{font-size:10px;color:var(--mu)}
 #pp.card,#dp.card{border-radius:20px}
 </style></head><body><div id="splash"><div style="font-size:24px;font-weight:800;color:var(--ac);text-align:center">Welcome to Ride Oracle</div><div style="max-width:280px;text-align:center;font-size:14px;margin-bottom:6px">A platform that connects passengers with the right ride</div><div style="position:relative;width:150px;height:150px"><svg viewBox="0 0 120 120" style="background:none;border:0;border-radius:0;width:100%;height:auto"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--ac2)" stroke-width="8"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--ac)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/></svg><div id="pct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--tx)">1%</div></div><div>Loading…</div></div>
-<div id="auth" class="w hide"><h1>🚕 Ride Oracle · Katsina</h1><div class="sub">Sign in to continue</div>
-<div class="tabs"><button id="aP" class="on">Passenger</button><button id="aD">Driver</button></div>
+<div id="auth" class="w hide"><h1>🚕 Ride Oracle · Katsina</h1><div class="sub">For Napep and Okada riders</div>
 <div class="card"><div id="nmw" class="hide"><label>Full name</label><input id="nm" autocomplete="name"></div>
 <div id="drw" class="hide"><label>Vehicle type</label><select id="vt"><option>Napep</option><option>Okada</option></select>
 <label>Vehicle number</label><input id="vn">
@@ -105,113 +104,103 @@ button,select,input{touch-action:manipulation}
 <label>Phone number</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel">
 <label>Password</label><input id="pw" type="password" autocomplete="current-password">
 <button class="btn" id="subm">Log in</button><div id="err" class="sub" style="color:var(--rd);margin:8px 0 0"></div>
-<div id="sw" class="sub" style="text-align:center;color:var(--ac);margin:10px 0 0"></div></div></div>
+<div id="sw" class="sub" style="text-align:center;color:var(--ac);margin:10px 0 0;cursor:pointer"></div></div></div>
 <div class="w hide" id="app">
 <h1>🚕 Ride Oracle · Katsina</h1>
-<div class="sub">Your everyday ride, made easier</div>
-<div id="hero" class="app-hero"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Where would you like to go?</h2><p>Find a nearby Napep or Okada and get moving.</p></div>
-<div class="quick-stats"><div class="quick-stat"><span>YOUR ROLE</span><b id="roleLabel">Passenger</b><small>Ride Oracle account</small></div><div class="quick-stat"><span>RIDE STATUS</span><b id="quickStatus">Ready</b><small id="quickHint">Start by choosing a location</small></div></div>
 <div class="row" style="align-items:center"><span id="who" class="pill"></span><button id="out" class="pill" style="border:0;cursor:pointer">Log out</button></div>
-
-<div id="pp" class="card">
- <label>Pickup area</label><select id="from"></select>
- <label>Destination</label><select id="to"></select>
- <button class="btn" id="search">🔍 Search for a ride</button>
- <div id="pst" class="sub" style="margin:10px 0 0;font-size:14px"></div>
-</div>
-
-<div id="dp" class="card hide">
- <div class="row"><span>Status</span><span id="dst" class="pill">Offline</span></div>
- <button class="btn" id="online">Go online</button>
-</div>
-
-<svg id="map" viewBox="0 0 400 360" role="img" aria-label="Map of Katsina areas"></svg>
-<div id="info" class="card hide"></div>
-
-
+<div class="tabs"><button id="tM" class="on">🗺️ People map</button><button id="tF">⛽ Fuel prices</button></div>
+<section id="vMap">
+ <div class="app-hero" style="margin-top:0"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Find passengers near you</h2><p>See where people are waiting across Katsina, then drive there to pick them up.</p></div>
+ <div class="card"><label style="margin-top:0">My current area</label><select id="me"></select></div>
+ <svg id="map" viewBox="0 0 400 360" role="img" aria-label="Map of people waiting in Katsina areas" style="margin-top:12px"></svg>
+ <div id="info" class="card hide"></div>
+ <div class="card"><div class="row" style="padding-top:0"><b>People waiting by area</b><span id="upd" style="font-size:11px"></span></div><div id="hot"></div></div>
+</section>
+<section id="vFuel" class="hide">
+ <div class="app-hero" style="margin-top:0"><span class="eyebrow">PETROL (PMS) · PER LITRE</span><h2 id="fp" style="font-size:34px;margin:8px 0 5px"></h2><p>Latest reported NNPC pump price (2 Nov 2026). Prices change often, so confirm at the pump.</p></div>
+ <div class="section-caption" style="font-size:14px;font-weight:850;margin:14px 2px 0">Mega stations &amp; filling stations in Katsina</div>
+ <div id="stations"></div>
+</section>
 </div>
 <script>
 const N={mk:['Central Market',200,200],pl:['Gobarau / Emir’s Palace',235,165],km:['Kofar Marusa',150,140],kk:['Kofar Kaura',265,105],kd:['Kofar Durbi',315,200],kg:['Kofar Guga',115,235],um:['UMYU Campus',80,315],st:['Katsina Stadium',290,295],lc:['Low-Cost Layout',200,300],fs:['Filin Samji',345,135],rf:['Rafindadi',50,185],su:['Sabuwar Unguwa',180,60],dg:['Dandagoro',365,245],ks:['Kofar Sauri',250,245],gr:['GRA Katsina',150,335]};
 const E=[['mk','pl'],['mk','km'],['pl','kk'],['pl','kd'],['mk','kg'],['mk','lc'],['lc','um'],['lc','st'],['kd','st'],['kd','fs'],['kk','fs'],['kg','um'],['km','kk'],['rf','kg'],['rf','km'],['su','km'],['su','kk'],['dg','kd'],['dg','st'],['ks','mk'],['ks','st'],['gr','lc'],['gr','um']];
+const REF=1355;
+const S=[
+{n:'NNPC Mega Station',a:'Dan Dagoro, Katsina',lat:12.9476101,lng:7.639339,ref:REF},
+{n:'NNPC Mega Station',a:'Nagoggo Road, Katsina',h:'Open 24 hours',lat:12.9956667,lng:7.6229507,ref:REF},
+{n:'NNPC Mega Station',a:'XJGJ+JRF, Katsina',lat:12.9765717,lng:7.6320326,ref:REF},
+{n:'NNPC Standard Mega Station Tayoyi',a:'Murtala Muhammed Way, opp. Alheri Solar, Katsina',h:'6:30 AM – 9:00 PM',lat:12.979085,lng:7.5909591,ref:REF},
+{n:'Matrix Energy Petrol Station',a:'No 3 Adeleke Bridge, IBB Way, Kofar Kaura, Katsina',h:'Open 24 hours',lat:12.9763361,lng:7.6120757},
+{n:'A.A Rano Fuel Station',a:'Near WTC roundabout, Katsina',h:'8:00 AM – 10:00 PM',lat:12.9810882,lng:7.6257133}];
 const adj={};Object.keys(N).forEach(k=>adj[k]=[]);E.forEach(([a,b])=>{adj[a].push(b);adj[b].push(a)});
 const $=i=>document.getElementById(i),KM=0.0125;
-let role='p',online=false,sel=null,busy=false,reqs=[],drv={x:200,y:200,node:'mk'},route=null,seq=0;
-function pt(id){const n=N[id],nb=adj[id][Math.floor(Math.random()*adj[id].length)],m=N[nb],k=.15+Math.random()*.5;return{x:n[1]+(m[1]-n[1])*k,y:n[2]+(m[2]-n[2])*k,road:n[0]+' – '+m[0]+' road'}}
-function gps(x,y){return(12.9908+(200-y)*0.00012).toFixed(5)+'° N, '+(7.6018+(x-200)*0.00012).toFixed(5)+'° E'}
-function bfs(a,b){const q=[[a]],s=new Set([a]);while(q.length){const p=q.shift(),l=p[p.length-1];if(l==b)return p;adj[l].forEach(n=>{if(!s.has(n)){s.add(n);q.push([...p,n])}})}return[a]}
-function len(ps){let d=0;for(let i=1;i<ps.length;i++)d+=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);return d*KM}
-function pathTo(from,to,start,end){const ns=bfs(from,to).map(k=>({x:N[k][1],y:N[k][2]}));return[start,...ns,...(end?[end]:[])]}
-const opts=Object.keys(N).map(k=>`<option value="${k}">${N[k][0]}</option>`).join('');
-$('from').innerHTML=opts;$('to').innerHTML=opts;$('to').value='um';
-function nearVeh(r){const d=k=>Math.hypot(N[k][1]-r.x,N[k][2]-r.y),ks=Object.keys(N).sort((a,b)=>d(a)-d(b)).slice(0,6),out=[];
- for(let i=0;i<4;i++){const a=ks[Math.floor(Math.random()*ks.length)],nb=adj[a][Math.floor(Math.random()*adj[a].length)],k=.2+Math.random()*.6,x=N[a][1]+(N[nb][1]-N[a][1])*k,y=N[a][2]+(N[nb][2]-N[a][2])*k,km=Math.hypot(x-r.x,y-r.y)*KM*1.3;
-  out.push({x,y,type:Math.random()<.5?'Napep':'Okada',km,eta:Math.max(15,Math.round(km/20*60))})}
- return out.sort((p,q)=>p.km-q.km)}
-function seed(){reqs=[].map(([n,f,t])=>({id:++seq,name:n,from:f,to:t,...pt(f),status:'open',mine:false}))}
-seed();
-function render(){
- $('map').classList.toggle('hide',role=='p'&&!reqs.some(r=>r.mine&&r.status!='done'));
- let h='';E.forEach(([a,b])=>h+=`<line x1="${N[a][1]}" y1="${N[a][2]}" x2="${N[b][1]}" y2="${N[b][2]}" stroke="var(--road)" stroke-width="7" stroke-linecap="round"/>`);
- Object.keys(N).forEach(k=>h+=`<circle cx="${N[k][1]}" cy="${N[k][2]}" r="4" fill="var(--mu)"/><text x="${N[k][1]}" y="${N[k][2]+16}" font-size="9" text-anchor="middle" fill="var(--mu)">${N[k][0]}</text>`);
- if(route)h+=`<polyline points="${route.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="var(--ac)" stroke-width="3" stroke-dasharray="6 5"/>`;
- reqs.filter(r=>r.status!='done'&&(role=='d'?(online&&(r.status=='open'||r.driving)):r.mine)).forEach(r=>{
-  const s=sel==r.id;h+=`<g class="pin" data-id="${r.id}">${s?`<circle class="pulse" cx="${r.x}" cy="${r.y}" r="6"/>`:''}<circle cx="${r.x}" cy="${r.y}" r="${s?9:7}" fill="var(--rd)" stroke="#fff" stroke-width="2"/><text x="${r.x}" y="${r.y-12}" font-size="10" font-weight="700" text-anchor="middle" fill="var(--tx)">${r.name}</text></g>`});
- const mo=role=='p'&&reqs.find(r=>r.mine&&r.status=='open');
- if(mo&&mo.near)mo.near.forEach((v,j)=>{if(!j)h+=`<line x1="${v.x}" y1="${v.y}" x2="${mo.x}" y2="${mo.y}" stroke="var(--ac)" stroke-width="3" stroke-dasharray="6 5"/><circle cx="${v.x}" cy="${v.y}" r="14" fill="none" stroke="var(--ac)" stroke-width="2"/>`;h+=`<text x="${v.x}" y="${v.y+6}" font-size="18" text-anchor="middle">${v.type=='Napep'?'🛺':'🛵'}</text>`});
- if(online||busy||role=='p'&&reqs.some(r=>r.mine&&r.driving))h+=`<text x="${drv.x}" y="${drv.y+6}" font-size="20" text-anchor="middle">🚕</text>`;
- $('map').innerHTML=h;
- $('map').querySelectorAll('.pin').forEach(g=>g.onclick=()=>{if(role=='d'&&!busy){sel=+g.dataset.id;const r=reqs.find(x=>x.id==sel);route=pathTo(drv.node,r.from,{x:drv.x,y:drv.y},r);ui();render()}})}
-function ui(){
- $('dst').textContent=busy?'On a trip':online?'Online':'Offline';$('online').textContent=online?'Go offline':'Go online';$('online').disabled=busy;
- const r=reqs.find(x=>x.id==sel),mine=reqs.find(x=>x.mine&&x.status!='done'),i=$('info');
- if(role=='d'&&r&&r.status=='open'){const km=len(route),road=r.road;
-  i.className='card';i.innerHTML=`<b>${r.name}</b> <span class="pill">Live location</span>
-  <div class="row"><span>On road</span><span>${road}</span></div><div class="row"><span>GPS</span><span>${gps(r.x,r.y)}</span></div>
-  <div class="row"><span>Pickup</span><span>${N[r.from][0]}</span></div><div class="row"><span>Going to</span><span>${N[r.to][0]}</span></div>
-  <div class="row"><span>Distance to you</span><span>${km.toFixed(1)} km · ~${Math.max(15,Math.round(km/20*60))} min to reach them</span></div>
-  <button class="btn" id="acc">Accept ride</button>`;$('acc').onclick=()=>accept(r)}
- else if(role=='d'&&!busy){i.className=online?'card':'card hide';i.innerHTML=online?'Tap a red passenger pin on the map to see their live location.':''}
- else if(role!='d'){const m=mine&&mine.status=='open'&&mine.near;if(m){i.className='card';i.innerHTML='<b>Nearest vehicles</b>'+mine.near.map((v,j)=>`<div class="row"><span>${v.type=='Napep'?'🛺':'🛵'} ${v.type}${j?'':' (nearest)'}</span><span>${v.km.toFixed(1)} km · ~${v.eta} min</span></div>`).join('')}else i.className='card hide'}
- $('pst').textContent=!mine?'':mine.status=='open'?'Request sent. Waiting for a driver to accept…':mine.status=='pickup'?'🚕 Driver accepted · '+fmt(mine.left)+' remaining for your ride':'🚕 Trip in progress · '+fmt(mine.left)+' to '+N[mine.to][0];
- $('hero').classList.toggle('hide',role=='d');$('roleLabel').textContent=role=='d'?'Driver':'Passenger';
- $('quickStatus').textContent=role=='d'?(busy?'On a trip':online?'Online':'Offline'):!mine?'Ready':mine.status=='open'?'Searching':mine.status=='pickup'?'On the way':'In trip';
- $('quickHint').textContent=role=='d'?(online?'Tap a passenger pin':'Go online to get requests'):mine?'Live ride update':'Start by choosing a location';
- $('search').disabled=!!mine}
-function fmt(s){s=Math.max(0,Math.round(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-let SPD=70,TOT=1,LEG=15;
-function remain(ps,i){let rem=Math.hypot(ps[i].x-drv.x,ps[i].y-drv.y);for(let j=i+1;j<ps.length;j++)rem+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);const r=reqs.find(x=>x.driving&&x.status!='done');if(!r)return;r.left=Math.max(0,Math.ceil(LEG*60*rem/TOT));ui();if(user&&user.role=='d'){$('info').className='card';$('info').innerHTML=(r.status=='pickup'?'Heading to '+r.name+' · ':'Trip to '+N[r.to][0]+' · ')+'<b>'+fmt(r.left)+' remaining</b>'}}
-function leg(ps,r,done){TOT=1;let d=0;for(let j=1;j<ps.length;j++)d+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);TOT=Math.max(d,1);LEG=Math.max(15,Math.round(TOT*KM/20*60));r.left=LEG*60;SPD=TOT/(LEG*60);ui();go(ps,done)}
-function go(ps,done){let i=1,t=0,last=null;route=ps;function f(ts){if(last===null)last=ts;t+=(ts-last)/1000*SPD;last=ts;
-  while(i<ps.length){const d=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);if(t<d){const k=t/d;drv.x=ps[i-1].x+(ps[i].x-ps[i-1].x)*k;drv.y=ps[i-1].y+(ps[i].y-ps[i-1].y)*k;break}t-=d;i++}
-  if(i>=ps.length){drv.x=ps[ps.length-1].x;drv.y=ps[ps.length-1].y;done();return}remain(ps,i);render();requestAnimationFrame(f)}requestAnimationFrame(f)}
-function accept(r){busy=true;r.status='pickup';r.driving=true;sel=null;$('info').className='card';$('info').innerHTML='Heading to '+r.name+'…';ui();
- leg(pathTo(drv.node,r.from,{x:drv.x,y:drv.y},r),r,()=>{r.status='trip';drv.node=r.from;ui();$('info').innerHTML='Picked up '+r.name+'. Driving to '+N[r.to][0]+'…';
-  leg(pathTo(r.from,r.to,{x:r.x,y:r.y},null),r,()=>{r.status='done';busy=false;drv.node=r.to;drv.x=N[r.to][1];drv.y=N[r.to][2];route=null;sel=null;ui();$('info').innerHTML='✅ Trip completed. Tap another passenger pin.';render()})});}
-$('search').onclick=()=>{const f=$('from').value,t=$('to').value;if(f==t){$('pst').textContent='Choose different pickup and destination.';return}
- $('pst').textContent='Searching for nearby drivers…';setTimeout(()=>{const q={id:++seq,name:user.name.split(' ')[0],owner:user.phone,from:f,to:t,...pt(f),status:'open',mine:true};q.near=nearVeh(q);reqs.push(q);ui();render()},900)};
-$('online').onclick=()=>{online=!online;if(!online){sel=null;route=null}ui();render()};
-function tab(r){role=r;$('pp').className='card'+(r=='p'?'':' hide');$('dp').className='card'+(r=='d'?'':' hide');sel=null;if(!busy)route=null;ui();render()}
-
-
 const mem={};const LS={get(k){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v)}catch(e){}return mem[k]||null},set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(s)}}
-let user=null,mode='login',ar='p';
-function setAuth(){$('aP').className=ar=='p'?'on':'';$('aD').className=ar=='d'?'on':'';const reg=mode=='reg';$('nmw').className=reg?'':'hide';$('drw').className=reg&&ar=='d'?'':'hide';$('subm').textContent=reg?'Create account':'Log in';$('sw').textContent=reg?'Have an account? Log in':ar=='d'?'New driver? Register':'New passenger? Register';$('sw').style.cursor='pointer';$('err').textContent=''}
-$('aP').onclick=()=>{ar='p';mode='login';setAuth()};$('aD').onclick=()=>{ar='d';mode='login';setAuth()};
+let user=null,mode='login',people={},rider={x:200,y:200,node:'mk'},sel=null,route=null,tid=0,going=false,left=0,done='';
+function spot(k){const n=N[k],nb=adj[k][Math.floor(Math.random()*adj[k].length)],m=N[nb],t=.15+Math.random()*.5;return{x:n[1]+(m[1]-n[1])*t,y:n[2]+(m[2]-n[2])*t,road:n[0]+' – '+m[0]+' road'}}
+function gen(){Object.keys(N).forEach(k=>{people[k]={n:Math.random()<.2?0:1+Math.floor(Math.random()*7),...spot(k)}})}
+function gps(x,y){return(12.9908+(200-y)*0.00012).toFixed(5)+'° N, '+(7.6018+(x-200)*0.00012).toFixed(5)+'° E'}
+function bfs(a,b){const q=[[a]],s=new Set([a]);while(q.length){const p=q.shift(),l=p[p.length-1];if(l==b)return p;adj[l].forEach(n=>{if(!s.has(n)){s.add(n);q.push([...p,n])}})}return[a]}
+function pathTo(from,to,start,end){return[start,...bfs(from,to).map(k=>({x:N[k][1],y:N[k][2]})),end]}
+function len(ps){let d=0;for(let i=1;i<ps.length;i++)d+=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);return d}
+function fmt(s){s=Math.max(0,Math.round(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+const emo=()=>user&&user.vt=='Okada'?'🛵':'🛺';
+function render(){let h='';
+ E.forEach(([a,b])=>h+=`<line x1="${N[a][1]}" y1="${N[a][2]}" x2="${N[b][1]}" y2="${N[b][2]}" stroke="var(--road)" stroke-width="7" stroke-linecap="round"/>`);
+ Object.keys(N).forEach(k=>h+=`<circle cx="${N[k][1]}" cy="${N[k][2]}" r="4" fill="var(--mu)"/><text x="${N[k][1]}" y="${N[k][2]+16}" font-size="9" text-anchor="middle" fill="var(--mu)">${N[k][0]}</text>`);
+ if(route)h+=`<polyline points="${route.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="var(--ac)" stroke-width="3" stroke-dasharray="6 5"/>`;
+ Object.keys(people).forEach(k=>{const p=people[k];if(!p.n)return;h+=`<g class="pin" data-k="${k}">${sel==k?`<circle class="pulse" cx="${p.x}" cy="${p.y}" r="10"/>`:''}<circle cx="${p.x}" cy="${p.y}" r="${9+Math.min(p.n,6)}" fill="var(--ac)" stroke="#fff" stroke-width="2"/><text x="${p.x}" y="${p.y+4}" font-size="11" font-weight="800" text-anchor="middle" fill="#fff">${p.n}</text></g>`});
+ h+=`<text x="${rider.x}" y="${rider.y+6}" font-size="22" text-anchor="middle">${emo()}</text>`;
+ $('map').innerHTML=h}
+function hot(){const ks=Object.keys(people).filter(k=>people[k].n>0).sort((a,b)=>people[b].n-people[a].n);
+ $('hot').innerHTML=ks.map(k=>{const p=people[k];return`<div class="row hr" data-k="${k}" style="cursor:pointer"><span style="color:var(--tx);font-weight:700">${N[k][0]}</span><span>👥 ${p.n} · ${(len(pathTo(rider.node,k,rider,p))*KM).toFixed(1)} km</span></div>`}).join('')||'<div class="sub">No people waiting right now.</div>'}
+function info(){const i=$('info');
+ if(going){i.className='card';i.innerHTML=`Heading to <b>${N[sel][0]}</b><div class="row"><span>Time remaining</span><b style="font-size:20px">${fmt(left)}</b></div><button class="btn sec" id="cx">Cancel trip</button>`;$('cx').onclick=stop;return}
+ if(done){i.className='card';i.innerHTML=done;return}
+ if(!sel||!people[sel]||!people[sel].n){i.className='card hide';return}
+ const p=people[sel],km=len(route)*KM;
+ i.className='card';i.innerHTML=`<b>${N[sel][0]}</b> <span class="pill">👥 ${p.n} waiting</span>
+ <div class="row"><span>Nearest spot</span><span>${p.road}</span></div><div class="row"><span>GPS</span><span>${gps(p.x,p.y)}</span></div>
+ <div class="row"><span>Distance</span><span>${km.toFixed(1)} km · ~${Math.max(15,Math.round(km/20*60))} min</span></div>
+ <button class="btn" id="go">Go to this area</button>`;$('go').onclick=start}
+function pick(k){if(going)return;sel=k;done='';route=pathTo(rider.node,k,{x:rider.x,y:rider.y},people[k]);info();render()}
+function stop(){tid++;going=false;route=null;const ks=Object.keys(N).sort((a,b)=>Math.hypot(N[a][1]-rider.x,N[a][2]-rider.y)-Math.hypot(N[b][1]-rider.x,N[b][2]-rider.y));rider.node=ks[0];sel=null;$('me').disabled=false;info();render();hot()}
+function start(){const k=sel,p=people[k],ps=pathTo(rider.node,k,{x:rider.x,y:rider.y},p),TOT=Math.max(len(ps),1),LEG=Math.max(15,Math.round(TOT*KM/20*60)),SPD=TOT/(LEG*60),my=++tid;
+ going=true;done='';route=ps;left=LEG*60;$('me').disabled=true;let i=1,t=0,last=null;
+ function f(ts){if(my!==tid)return;if(last===null)last=ts;t+=(ts-last)/1000*SPD;last=ts;
+  while(i<ps.length){const d=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);if(t<d){const r=t/d;rider.x=ps[i-1].x+(ps[i].x-ps[i-1].x)*r;rider.y=ps[i-1].y+(ps[i].y-ps[i-1].y)*r;break}t-=d;i++}
+  if(i>=ps.length){rider.x=p.x;rider.y=p.y;rider.node=k;going=false;route=null;sel=null;$('me').disabled=false;$('me').value=k;done='✅ You have arrived in <b>'+N[k][0]+'</b>. About '+(people[k].n||'no')+' people were waiting here.';info();render();hot();return}
+  let rem=Math.hypot(ps[i].x-rider.x,ps[i].y-rider.y);for(let j=i+1;j<ps.length;j++)rem+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);
+  left=Math.ceil(LEG*60*rem/TOT);info();render();requestAnimationFrame(f)}
+ info();requestAnimationFrame(f)}
+function fuel(){const sv=LS.get('ro_fuel')||{};$('fp').textContent='₦'+REF.toLocaleString()+' / L';
+ $('stations').innerHTML=S.map((s,i)=>{const v=sv[i],pr=v?v.p:s.ref,src=v?'Updated by you · '+v.t:s.ref?'Reference price · NNPC, 2 Nov 2026':'Price not reported yet';
+ return`<div class="card"><b>${s.n}</b><div class="sub" style="margin:2px 0 8px">📍 ${s.a}${s.h?'<br>🕒 '+s.h:''}</div><div class="row"><span>Petrol (PMS)</span><b style="font-size:22px;color:var(--tx)">${pr?'₦'+pr.toLocaleString()+' /L':'—'}</b></div><div class="sub" style="margin:0 0 8px">${src}</div><div style="display:flex;gap:8px"><input data-i="${i}" inputmode="numeric" placeholder="Update price (₦)"><button class="btn sec sv" data-i="${i}" style="margin:0;width:auto;padding:0 18px">Save</button></div><a href="https://www.google.com/maps?q=${s.lat},${s.lng}" target="_blank" rel="noopener" style="display:block;margin-top:10px;color:var(--ac);font-weight:700;font-size:13px">Open in Google Maps ↗</a></div>`}).join('')}
+$('stations').onclick=e=>{const b=e.target.closest('.sv');if(!b)return;const i=b.dataset.i,v=parseInt(document.querySelector('#stations input[data-i="'+i+'"]').value.replace(/\D/g,''));if(!(v>=100&&v<=5000))return;const sv=LS.get('ro_fuel')||{};sv[i]={p:v,t:new Date().toLocaleDateString()};LS.set('ro_fuel',sv);fuel()};
+$('map').onclick=e=>{const g=e.target.closest('.pin');if(g)pick(g.dataset.k)};
+$('hot').onclick=e=>{const r=e.target.closest('.hr');if(r)pick(r.dataset.k)};
+$('me').innerHTML=Object.keys(N).map(k=>`<option value="${k}">${N[k][0]}</option>`).join('');
+$('me').onchange=()=>{const k=$('me').value;rider={x:N[k][1],y:N[k][2],node:k};sel=null;route=null;done='';info();render();hot()};
+function tab(t){$('vMap').className=t=='M'?'':'hide';$('vFuel').className=t=='F'?'':'hide';$('tM').className=t=='M'?'on':'';$('tF').className=t=='F'?'on':''}
+$('tM').onclick=()=>tab('M');$('tF').onclick=()=>tab('F');
+function stamp(){$('upd').textContent='Updated '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+setInterval(()=>{Object.keys(people).forEach(k=>{const p=people[k];const n=Math.max(0,Math.min(9,p.n+Math.floor(Math.random()*5)-2));if(!p.n&&n)Object.assign(p,spot(k));p.n=n});if(!going){hot();info();if(sel&&people[sel]&&people[sel].n)route=pathTo(rider.node,sel,{x:rider.x,y:rider.y},people[sel])}render();stamp()},15000);
+function setAuth(){const reg=mode=='reg';$('nmw').className=reg?'':'hide';$('drw').className=reg?'':'hide';$('subm').textContent=reg?'Create rider account':'Log in';$('sw').textContent=reg?'Have an account? Log in':'New rider? Register';$('err').textContent=''}
 $('sw').onclick=()=>{mode=mode=='reg'?'login':'reg';setAuth()};
-function enter(u){user=u;reqs.forEach(r=>r.mine=r.owner==u.phone);online=false;$('who').textContent=(u.role=='d'?'🚕 Driver · ':'👤 ')+u.name;$('auth').className='w hide';$('app').className='w';$('pw').value='';tab(u.role)}
-$('out').onclick=()=>{user=null;online=false;sel=null;route=null;$('app').className='w hide';$('auth').className='w';setAuth()};
+function enter(u){user=u;tid++;going=false;sel=null;route=null;done='';rider={x:200,y:200,node:'mk'};$('me').value='mk';$('me').disabled=false;
+ $('who').textContent=(u.vt=='Okada'?'🛵 ':'🛺 ')+u.name+(u.vn?' · '+u.vn:'');$('auth').className='w hide';$('app').className='w';$('pw').value='';tab('M');gen();render();hot();info();fuel();stamp()}
+$('out').onclick=()=>{tid++;going=false;user=null;$('app').className='w hide';$('auth').className='w';mode='login';setAuth()};
 $('subm').onclick=async()=>{const ph=$('ph').value.replace(/\D/g,''),pw=$('pw').value,nm=$('nm').value.trim(),e=$('err'),reg=mode=='reg';
  if(ph.length<10){e.textContent='Enter a valid phone number.';return}
  if(pw.length<6){e.textContent='Password must be at least 6 characters.';return}
  const a=LS.get('ro_accts')||[],h=await hash(pw);
  if(reg){if(!nm){e.textContent='Enter your full name.';return}
- let x={};if(ar=='d'){x={vt:$('vt').value,vn:$('vn').value.trim(),vl:$('vl').value.trim(),nin:$('nin').value.replace(/\D/g,''),state:$('stt').value.trim(),lga:$('lga').value.trim(),addr:$('adr').value.trim()};
-  if(!x.vn||!x.vl||!x.state||!x.lga||!x.addr){e.textContent='Please fill in all driver details.';return}
-  if(x.nin.length!=11){e.textContent='NIN must be 11 digits.';return}}
- if(a.some(y=>y.phone==ph&&y.role==ar)){e.textContent='Phone already registered. Please log in.';return}
- const u={role:ar,name:nm,phone:ph,h,...x};a.push(u);LS.set('ro_accts',a);enter(u)}
- else{const u=a.find(x=>x.phone==ph&&x.role==ar&&x.h==h);if(!u){e.textContent='Wrong phone number or password.';return}enter(u)}};
-(async()=>{
- setAuth();const t0=performance.now();(function f(t){const p=Math.min(100,Math.max(1,Math.round((t-t0)/20)));$('pct').textContent=p+'%';$('ring').style.strokeDashoffset=326.7*(1-p/100);if(p<100)requestAnimationFrame(f);else setTimeout(()=>{$('splash').className='hide';$('auth').className='w'},150)})(t0)})();
+  const x={vt:$('vt').value,vn:$('vn').value.trim(),vl:$('vl').value.trim(),nin:$('nin').value.replace(/\D/g,''),state:$('stt').value.trim(),lga:$('lga').value.trim(),addr:$('adr').value.trim()};
+  if(!x.vn||!x.vl||!x.state||!x.lga||!x.addr){e.textContent='Please fill in all rider details.';return}
+  if(x.nin.length!=11){e.textContent='NIN must be 11 digits.';return}
+  if(a.some(y=>y.phone==ph&&y.role=='d')){e.textContent='Phone already registered. Please log in.';return}
+  const u={role:'d',name:nm,phone:ph,h,...x};a.push(u);LS.set('ro_accts',a);enter(u)}
+ else{const u=a.find(x=>x.phone==ph&&x.role=='d'&&x.h==h);if(!u){e.textContent='Wrong phone number or password.';return}enter(u)}};
+(function(){setAuth();const t0=performance.now();(function f(t){const p=Math.min(100,Math.max(1,Math.round((t-t0)/20)));$('pct').textContent=p+'%';$('ring').style.strokeDashoffset=326.7*(1-p/100);if(p<100)requestAnimationFrame(f);else setTimeout(()=>{$('splash').className='hide';$('auth').className='w'},150)})(t0)})();
 </script></body></html>
