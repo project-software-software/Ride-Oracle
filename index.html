@@ -63,7 +63,7 @@ input::placeholder{color:var(--mu)}
 #app>h1{margin-top:4px}
 #app>.sub{margin-bottom:12px}
 #pp label:first-child{margin-top:0}
-#map{width:100%;height:auto;aspect-ratio:400/360;display:block;margin-top:14px;background:var(--map);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--shadow);touch-action:pan-y}
+#map{width:100%;height:auto;aspect-ratio:400/390;display:block;margin-top:14px;background:var(--map);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--shadow);touch-action:pan-y}
 #info{font-size:13px;line-height:1.6}
 #info .row{border-bottom:1px solid var(--bd);padding:9px 0}
 #info .row:last-of-type{border-bottom:0}
@@ -112,7 +112,7 @@ button,select,input{touch-action:manipulation}
 <section id="vMap">
  <div class="app-hero" style="margin-top:0"><span class="eyebrow">RIDE ORACLE · KATSINA</span><h2>Find passengers near you</h2><p>See where people are waiting across Katsina, then drive there to pick them up.</p></div>
  <div class="card"><label style="margin-top:0">My current area</label><select id="me"></select></div>
- <svg id="map" viewBox="0 0 400 360" role="img" aria-label="Map of people waiting in Katsina areas" style="margin-top:12px"></svg>
+ <svg id="map" viewBox="0 0 400 390" role="img" aria-label="Map of people waiting in Katsina areas" style="margin-top:12px"></svg>
  <div id="info" class="card hide"></div>
  <div class="card"><div class="row" style="padding-top:0"><b>People waiting by area</b><span id="upd" style="font-size:11px"></span></div><div id="hot"></div></div>
 </section>
@@ -123,8 +123,10 @@ button,select,input{touch-action:manipulation}
 </section>
 </div>
 <script>
-const N={mk:['Central Market',200,200],pl:['Gobarau / Emir’s Palace',235,165],km:['Kofar Marusa',150,140],kk:['Kofar Kaura',265,105],kd:['Kofar Durbi',315,200],kg:['Kofar Guga',115,235],um:['UMYU Campus',80,315],st:['Katsina Stadium',290,295],lc:['Low-Cost Layout',200,300],fs:['Filin Samji',345,135],rf:['Rafindadi',50,185],su:['Sabuwar Unguwa',180,60],dg:['Dandagoro',365,245],ks:['Kofar Sauri',250,245],gr:['GRA Katsina',150,335]};
-const E=[['mk','pl'],['mk','km'],['pl','kk'],['pl','kd'],['mk','kg'],['mk','lc'],['lc','um'],['lc','st'],['kd','st'],['kd','fs'],['kk','fs'],['kg','um'],['km','kk'],['rf','kg'],['rf','km'],['su','km'],['su','kk'],['dg','kd'],['dg','st'],['ks','mk'],['ks','st'],['gr','lc'],['gr','um']];
+const N={mk:['Central Market',200,200],pl:['Gobarau / Emir’s Palace',235,165],km:['Kofar Marusa',150,140],kk:['Kofar Kaura',265,105],kd:['Kofar Durbi',315,200],kg:['Kofar Guga',115,235],um:['UMYU Campus',80,315],st:['Katsina Stadium',290,295],lc:['Low-Cost Layout',200,300],fs:['Filin Samji',345,135],rf:['Rafindadi',50,185],su:['Sabuwar Unguwa',180,60],dg:['Dandagoro',365,245],ks:['Kofar Sauri',250,245],gr:['GRA Katsina',150,335],yk:['Yar-kutungu',60,100],cm:['Chake Market',105,185],ki:['KSITM',330,60],sn:['School of Nursing',245,345],gh:['General Hospital',225,70],oh:['Orthopaedic Hospital',350,320],ak:['Amadi Kurfi House (National)',75,268],hc:['Hajji Camp',370,185]};
+const E=[['mk','pl'],['mk','km'],['pl','kk'],['pl','kd'],['mk','kg'],['mk','lc'],['lc','um'],['lc','st'],['kd','st'],['kd','fs'],['kk','fs'],['kg','um'],['km','kk'],['rf','kg'],['rf','km'],['su','km'],['su','kk'],['dg','kd'],['dg','st'],['ks','mk'],['ks','st'],['gr','lc'],['gr','um'],['yk','rf'],['yk','km'],['cm','rf'],['cm','kg'],['cm','mk'],['ki','kk'],['ki','fs'],['sn','lc'],['sn','st'],['gh','su'],['gh','kk'],['oh','st'],['oh','dg'],['ak','rf'],['ak','um'],['hc','kd'],['hc','dg']];
+const H={mk:[450,1080],cm:[510,1080],ki:[630,1080],sn:[450,1080],gh:[450,1380],oh:[450,1080],ak:[630,1080],hc:[270,1080]};
+const BASE={mk:6,pl:3,km:2,kk:3,kd:2,kg:4,um:5,st:2,lc:3,fs:1,rf:2,su:2,dg:3,ks:2,gr:1,yk:4,cm:5,ki:3,sn:4,gh:6,oh:3,ak:4,hc:7};
 const REF=1355;
 const S=[
 {n:'NNPC Mega Station',a:'Dan Dagoro, Katsina',lat:12.9476101,lng:7.639339,ref:REF},
@@ -138,8 +140,11 @@ const $=i=>document.getElementById(i),KM=0.0125;
 const mem={};const LS={get(k){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v)}catch(e){}return mem[k]||null},set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(s)}}
 let user=null,mode='login',people={},rider={x:200,y:200,node:'mk'},sel=null,route=null,tid=0,going=false,left=0,done='';
-function spot(k){const n=N[k],nb=adj[k][Math.floor(Math.random()*adj[k].length)],m=N[nb],t=.15+Math.random()*.5;return{x:n[1]+(m[1]-n[1])*t,y:n[2]+(m[2]-n[2])*t,road:n[0]+' – '+m[0]+' road'}}
-function gen(){Object.keys(N).forEach(k=>{people[k]={n:Math.random()<.2?0:1+Math.floor(Math.random()*7),...spot(k)}})}
+function spot(k){const n=N[k],nb=adj[k][0],m=N[nb],t=.35;return{x:n[1]+(m[1]-n[1])*t,y:n[2]+(m[2]-n[2])*t,road:n[0]+' – '+m[0]+' road'}}
+function isOpen(k){const h=H[k];if(!h)return true;const d=new Date(),m=d.getHours()*60+d.getMinutes();return m>=h[0]&&m<h[1]}
+function sync(){Object.keys(people).forEach(k=>people[k].n=isOpen(k)?BASE[k]:0)}
+function gen(){Object.keys(N).forEach(k=>{people[k]={n:0,...spot(k)}});sync()}
+function fmtT(m){const h=Math.floor(m/60)%24;return(h%12||12)+':'+String(m%60).padStart(2,'0')+' '+(h>=12?'PM':'AM')}
 function gps(x,y){return(12.9908+(200-y)*0.00012).toFixed(5)+'° N, '+(7.6018+(x-200)*0.00012).toFixed(5)+'° E'}
 function bfs(a,b){const q=[[a]],s=new Set([a]);while(q.length){const p=q.shift(),l=p[p.length-1];if(l==b)return p;adj[l].forEach(n=>{if(!s.has(n)){s.add(n);q.push([...p,n])}})}return[a]}
 function pathTo(from,to,start,end){return[start,...bfs(from,to).map(k=>({x:N[k][1],y:N[k][2]})),end]}
@@ -153,18 +158,21 @@ function render(){let h='';
  Object.keys(people).forEach(k=>{const p=people[k];if(!p.n)return;h+=`<g class="pin" data-k="${k}">${sel==k?`<circle class="pulse" cx="${p.x}" cy="${p.y}" r="10"/>`:''}<circle cx="${p.x}" cy="${p.y}" r="${9+Math.min(p.n,6)}" fill="var(--ac)" stroke="#fff" stroke-width="2"/><text x="${p.x}" y="${p.y+4}" font-size="11" font-weight="800" text-anchor="middle" fill="#fff">${p.n}</text></g>`});
  h+=`<text x="${rider.x}" y="${rider.y+6}" font-size="22" text-anchor="middle">${emo()}</text>`;
  $('map').innerHTML=h}
-function hot(){const ks=Object.keys(people).filter(k=>people[k].n>0).sort((a,b)=>people[b].n-people[a].n);
- $('hot').innerHTML=ks.map(k=>{const p=people[k];return`<div class="row hr" data-k="${k}" style="cursor:pointer"><span style="color:var(--tx);font-weight:700">${N[k][0]}</span><span>👥 ${p.n} · ${(len(pathTo(rider.node,k,rider,p))*KM).toFixed(1)} km</span></div>`}).join('')||'<div class="sub">No people waiting right now.</div>'}
+function hot(){const ks=Object.keys(N).sort((a,b)=>(people[b].n>0)-(people[a].n>0)||people[b].n-people[a].n);
+ $('hot').innerHTML=ks.map(k=>{const p=people[k],h=H[k],hr=h?`<br><small style="color:var(--mu);font-weight:500">${fmtT(h[0])} – ${fmtT(h[1])}</small>`:'';
+  return`<div class="row hr" data-k="${k}" style="cursor:pointer"><span style="color:var(--tx);font-weight:700">${N[k][0]}${hr}</span><span>${p.n?'👥 '+p.n+' · '+(len(pathTo(rider.node,k,rider,p))*KM).toFixed(1)+' km':'Closed · opens '+fmtT(h[0])}</span></div>`}).join('')}
 function info(){const i=$('info');
  if(going){i.className='card';i.innerHTML=`Heading to <b>${N[sel][0]}</b><div class="row"><span>Time remaining</span><b style="font-size:20px">${fmt(left)}</b></div><button class="btn sec" id="cx">Cancel trip</button>`;$('cx').onclick=stop;return}
  if(done){i.className='card';i.innerHTML=done;return}
- if(!sel||!people[sel]||!people[sel].n){i.className='card hide';return}
- const p=people[sel],km=len(route)*KM;
- i.className='card';i.innerHTML=`<b>${N[sel][0]}</b> <span class="pill">👥 ${p.n} waiting</span>
+ if(!sel||!people[sel]){i.className='card hide';return}
+ const p=people[sel],h=H[sel],hrs=h?`<div class="row"><span>Waiting hours</span><span>${fmtT(h[0])} – ${fmtT(h[1])}</span></div>`:'';
+ if(!p.n){i.className='card';i.innerHTML=`<b>${N[sel][0]}</b> <span class="pill">Closed now</span>${hrs}<div class="sub" style="margin:6px 0 0">People gather here from ${fmtT(h[0])}.</div>`;return}
+ const km=len(route)*KM;
+ i.className='card';i.innerHTML=`<b>${N[sel][0]}</b> <span class="pill">👥 ${p.n} waiting</span>${hrs}
  <div class="row"><span>Nearest spot</span><span>${p.road}</span></div><div class="row"><span>GPS</span><span>${gps(p.x,p.y)}</span></div>
  <div class="row"><span>Distance</span><span>${km.toFixed(1)} km · ~${Math.max(15,Math.round(km/20*60))} min</span></div>
  <button class="btn" id="go">Go to this area</button>`;$('go').onclick=start}
-function pick(k){if(going)return;sel=k;done='';route=pathTo(rider.node,k,{x:rider.x,y:rider.y},people[k]);info();render()}
+function pick(k){if(going)return;sel=k;done='';route=people[k].n?pathTo(rider.node,k,{x:rider.x,y:rider.y},people[k]):null;info();render()}
 function stop(){tid++;going=false;route=null;const ks=Object.keys(N).sort((a,b)=>Math.hypot(N[a][1]-rider.x,N[a][2]-rider.y)-Math.hypot(N[b][1]-rider.x,N[b][2]-rider.y));rider.node=ks[0];sel=null;$('me').disabled=false;info();render();hot()}
 function start(){const k=sel,p=people[k],ps=pathTo(rider.node,k,{x:rider.x,y:rider.y},p),TOT=Math.max(len(ps),1),LEG=Math.max(15,Math.round(TOT*KM/20*60)),SPD=TOT/(LEG*60),my=++tid;
  going=true;done='';route=ps;left=LEG*60;$('me').disabled=true;let i=1,t=0,last=null;
@@ -174,33 +182,4 @@ function start(){const k=sel,p=people[k],ps=pathTo(rider.node,k,{x:rider.x,y:rid
   let rem=Math.hypot(ps[i].x-rider.x,ps[i].y-rider.y);for(let j=i+1;j<ps.length;j++)rem+=Math.hypot(ps[j].x-ps[j-1].x,ps[j].y-ps[j-1].y);
   left=Math.ceil(LEG*60*rem/TOT);info();render();requestAnimationFrame(f)}
  info();requestAnimationFrame(f)}
-function fuel(){const sv=LS.get('ro_fuel')||{};$('fp').textContent='₦'+REF.toLocaleString()+' / L';
- $('stations').innerHTML=S.map((s,i)=>{const v=sv[i],pr=v?v.p:s.ref,src=v?'Updated by you · '+v.t:s.ref?'Reference price · NNPC, 2 Nov 2026':'Price not reported yet';
- return`<div class="card"><b>${s.n}</b><div class="sub" style="margin:2px 0 8px">📍 ${s.a}${s.h?'<br>🕒 '+s.h:''}</div><div class="row"><span>Petrol (PMS)</span><b style="font-size:22px;color:var(--tx)">${pr?'₦'+pr.toLocaleString()+' /L':'—'}</b></div><div class="sub" style="margin:0 0 8px">${src}</div><div style="display:flex;gap:8px"><input data-i="${i}" inputmode="numeric" placeholder="Update price (₦)"><button class="btn sec sv" data-i="${i}" style="margin:0;width:auto;padding:0 18px">Save</button></div><a href="https://www.google.com/maps?q=${s.lat},${s.lng}" target="_blank" rel="noopener" style="display:block;margin-top:10px;color:var(--ac);font-weight:700;font-size:13px">Open in Google Maps ↗</a></div>`}).join('')}
-$('stations').onclick=e=>{const b=e.target.closest('.sv');if(!b)return;const i=b.dataset.i,v=parseInt(document.querySelector('#stations input[data-i="'+i+'"]').value.replace(/\D/g,''));if(!(v>=100&&v<=5000))return;const sv=LS.get('ro_fuel')||{};sv[i]={p:v,t:new Date().toLocaleDateString()};LS.set('ro_fuel',sv);fuel()};
-$('map').onclick=e=>{const g=e.target.closest('.pin');if(g)pick(g.dataset.k)};
-$('hot').onclick=e=>{const r=e.target.closest('.hr');if(r)pick(r.dataset.k)};
-$('me').innerHTML=Object.keys(N).map(k=>`<option value="${k}">${N[k][0]}</option>`).join('');
-$('me').onchange=()=>{const k=$('me').value;rider={x:N[k][1],y:N[k][2],node:k};sel=null;route=null;done='';info();render();hot()};
-function tab(t){$('vMap').className=t=='M'?'':'hide';$('vFuel').className=t=='F'?'':'hide';$('tM').className=t=='M'?'on':'';$('tF').className=t=='F'?'on':''}
-$('tM').onclick=()=>tab('M');$('tF').onclick=()=>tab('F');
-function stamp(){$('upd').textContent='Updated '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
-setInterval(()=>{Object.keys(people).forEach(k=>{const p=people[k];const n=Math.max(0,Math.min(9,p.n+Math.floor(Math.random()*5)-2));if(!p.n&&n)Object.assign(p,spot(k));p.n=n});if(!going){hot();info();if(sel&&people[sel]&&people[sel].n)route=pathTo(rider.node,sel,{x:rider.x,y:rider.y},people[sel])}render();stamp()},15000);
-function setAuth(){const reg=mode=='reg';$('nmw').className=reg?'':'hide';$('drw').className=reg?'':'hide';$('subm').textContent=reg?'Create rider account':'Log in';$('sw').textContent=reg?'Have an account? Log in':'New rider? Register';$('err').textContent=''}
-$('sw').onclick=()=>{mode=mode=='reg'?'login':'reg';setAuth()};
-function enter(u){user=u;tid++;going=false;sel=null;route=null;done='';rider={x:200,y:200,node:'mk'};$('me').value='mk';$('me').disabled=false;
- $('who').textContent=(u.vt=='Okada'?'🛵 ':'🛺 ')+u.name+(u.vn?' · '+u.vn:'');$('auth').className='w hide';$('app').className='w';$('pw').value='';tab('M');gen();render();hot();info();fuel();stamp()}
-$('out').onclick=()=>{tid++;going=false;user=null;$('app').className='w hide';$('auth').className='w';mode='login';setAuth()};
-$('subm').onclick=async()=>{const ph=$('ph').value.replace(/\D/g,''),pw=$('pw').value,nm=$('nm').value.trim(),e=$('err'),reg=mode=='reg';
- if(ph.length<10){e.textContent='Enter a valid phone number.';return}
- if(pw.length<6){e.textContent='Password must be at least 6 characters.';return}
- const a=LS.get('ro_accts')||[],h=await hash(pw);
- if(reg){if(!nm){e.textContent='Enter your full name.';return}
-  const x={vt:$('vt').value,vn:$('vn').value.trim(),vl:$('vl').value.trim(),nin:$('nin').value.replace(/\D/g,''),state:$('stt').value.trim(),lga:$('lga').value.trim(),addr:$('adr').value.trim()};
-  if(!x.vn||!x.vl||!x.state||!x.lga||!x.addr){e.textContent='Please fill in all rider details.';return}
-  if(x.nin.length!=11){e.textContent='NIN must be 11 digits.';return}
-  if(a.some(y=>y.phone==ph&&y.role=='d')){e.textContent='Phone already registered. Please log in.';return}
-  const u={role:'d',name:nm,phone:ph,h,...x};a.push(u);LS.set('ro_accts',a);enter(u)}
- else{const u=a.find(x=>x.phone==ph&&x.role=='d'&&x.h==h);if(!u){e.textContent='Wrong phone number or password.';return}enter(u)}};
-(function(){setAuth();const t0=performance.now();(function f(t){const p=Math.min(100,Math.max(1,Math.round((t-t0)/20)));$('pct').textContent=p+'%';$('ring').style.strokeDashoffset=326.7*(1-p/100);if(p<100)requestAnimationFrame(f);else setTimeout(()=>{$('splash').className='hide';$('auth').className='w'},150)})(t0)})();
-</script></body></html>
+function fuel(){con
